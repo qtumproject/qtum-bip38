@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from bip38 import (
+from qtum_bip38 import (
     bip38_encrypt, bip38_decrypt
 )
 from typing import Literal
@@ -8,7 +8,7 @@ from typing import Literal
 import json
 
 # Passphrase / password
-PASSPHRASE: str = "meherett"
+PASSPHRASE: str = "qtum123"
 # Wallet important format
 WIF: str = "5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR"
 # Network type

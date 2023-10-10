@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from bip38 import (
+from qtum_bip38 import (
     intermediate_code, create_new_encrypted_wif, confirm_code, bip38_decrypt
 )
 from typing import (
@@ -11,7 +11,7 @@ import json
 import os
 
 # Passphrase / password
-PASSPHRASE: str = "meherett"
+PASSPHRASE: str = "qtum123"
 # Pick random owner salt / use your own salt
 OWNER_SALT: Union[str, bytes] = os.urandom(8)  # "75ed1cdeb254cb38"
 # Pick random seed / use your own seed

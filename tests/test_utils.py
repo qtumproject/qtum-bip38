@@ -3,7 +3,7 @@
 import json
 import os
 
-from bip38.utils import (
+from qtum_bip38.utils import (
     get_bytes, bytes_reverse, bytes_to_string, bytes_to_integer, integer_to_bytes, ripemd160, sha256, double_sha256, hash160
 )
 

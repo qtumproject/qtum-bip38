@@ -3,7 +3,7 @@
 import json
 import os
 
-from bip38.bip38 import (
+from qtum_bip38.bip38 import (
     bip38_encrypt, bip38_decrypt, intermediate_code, create_new_encrypted_wif, confirm_code,
     # Importing other functions for testing
     private_key_to_public_key, public_key_to_addresses, private_key_to_wif,

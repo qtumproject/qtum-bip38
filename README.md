@@ -1,33 +1,33 @@
-# Bitcoin Improvement Proposal - 0038 / BIP38
+# Qtum-BIP38
 
-[![Build Status](https://app.travis-ci.com/meherett/python-bip38.svg?branch=master)](https://app.travis-ci.com/meherett/python-bip38)
-[![PyPI Version](https://img.shields.io/pypi/v/bip38.svg?color=blue)](https://pypi.org/project/bip38)
-[![Documentation Status](https://readthedocs.org/projects/bip38/badge/?version=master)](https://bip38.readthedocs.io)
-[![PyPI License](https://img.shields.io/pypi/l/bip38?color=black)](https://pypi.org/project/bip38)
-[![PyPI Python Version](https://img.shields.io/pypi/pyversions/bip38.svg)](https://pypi.org/project/bip38)
-[![Coverage Status](https://coveralls.io/repos/github/meherett/python-bip38/badge.svg?branch=master)](https://coveralls.io/github/meherett/python-bip38)
+[![GitHub Workflow](https://github.com/qtumproject/qtum-bip38/actions/workflows/workflow.yml/badge.svg)](https://github.com/qtumproject/qtum-bip38)
+[![PyPI Version](https://img.shields.io/pypi/v/qtum-bip38.svg?color=blue)](https://pypi.org/project/qtum-bip38)
+[![PyPI License](https://img.shields.io/pypi/l/qtum-bip38?color=black)](https://pypi.org/project/qtum-bip38)
+[![PyPI Python Version](https://img.shields.io/pypi/pyversions/qtum-bip38.svg)](https://pypi.org/project/qtum-bip38)
 
-Python library for implementation of Bitcoin Improvement Proposal - 0038 / BIP38 protocol. It supports both [No EC-multiply](https://github.com/bitcoin/bips/blob/master/bip-0038.mediawiki#encryption-when-ec-multiply-flag-is-not-used) and [EC-multiply](https://github.com/bitcoin/bips/blob/master/bip-0038.mediawiki#encryption-when-ec-multiply-mode-is-used) modes.
-
-BIP38 is a cryptographic standard that defines a method for encrypting and securing private keys associated with Bitcoin addresses. It provides a way to create encrypted versions of private keys, which can then be decrypted using a passphrase. This adds an additional layer of security to the process of storing and transmitting private keys.
-
-By encrypting a private key with BIP38, users can protect their funds even if the encrypted private key is exposed. This is because an attacker would need to know the passphrase in order to decrypt the private key and gain access to the associated funds. BIP38 encryption is often used to create "paper wallets" or physical copies of Bitcoin private keys that can be stored offline for enhanced security.
+Python library for implementation of BIP38 for Qtum. It supports both [No EC-multiply](https://github.com/bitcoin/bips/blob/master/bip-0038.mediawiki#encryption-when-ec-multiply-flag-is-not-used) and [EC-multiply](https://github.com/bitcoin/bips/blob/master/bip-0038.mediawiki#encryption-when-ec-multiply-mode-is-used) modes.
 
 For more info see the [Passphrase-protected private key - BIP38](https://en.bitcoin.it/wiki/BIP_0038) spec.
 
 ## Installation
 
-The easiest way to install `bip38` is via pip:
+The easiest way to install `qtum-bip38` is via pip:
 
 ```
-pip install bip38
+pip install qtum-bip38
 ```
 
 If you want to run the latest version of the code, you can install from the git:
 
 ```
-pip install git+git://github.com/meherett/python-bip38.git
+pip install git+git://github.com/qtumproject/qtum-bip38.git
 ```
+
+## Documentation
+
+Read here: https://bip38.readthedocs.io
+
+When you import, replace `bip38` to `qtum_bip38` package name.
 
 ## Quick Usage
 
@@ -36,21 +36,17 @@ pip install git+git://github.com/meherett/python-bip38.git
 ```python
 #!/usr/bin/env python3
 
-from bip38 import (
+from qtum_bip38 import (
     private_key_to_wif, bip38_encrypt, bip38_decrypt
 )
-from typing import (
-    List, Literal
-)
+from typing import List
 
 import json
 
 # Private key
 PRIVATE_KEY: str = "cbf4b9f70470856bb4f40f80b87edb90865997ffee6df315ab166d713af433a5"
 # Passphrase / password
-PASSPHRASE: str = "meherett"  # u"\u03D2\u0301\u0000\U00010400\U0001F4A9"
-# Network type
-NETWORK: Literal["mainnet", "testnet"] = "mainnet"
+PASSPHRASE: str = "qtum123"  # u"\u03D2\u0301\u0000\U00010400\U0001F4A9"
 # To show detail
 DETAIL: bool = True
 # Wallet important format's
@@ -64,12 +60,12 @@ for WIF in WIFs:
     print("WIF:", WIF)
 
     encrypted_wif: str = bip38_encrypt(
-        wif=WIF, passphrase=PASSPHRASE, network=NETWORK
+        wif=WIF, passphrase=PASSPHRASE
     )
     print("BIP38 Encrypted WIF:", encrypted_wif)
     
     print("BIP38 Decrypted:", json.dumps(bip38_decrypt(
-        encrypted_wif=encrypted_wif, passphrase=PASSPHRASE, network=NETWORK, detail=DETAIL
+        encrypted_wif=encrypted_wif, passphrase=PASSPHRASE, detail=DETAIL
     ), indent=4))
 
     print("-" * 125)
@@ -79,8 +75,8 @@ for WIF in WIFs:
   <summary>Output</summary><br/>
 
 ```shell
-WFI: 5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR
-BIP38 Encrypted WIF: 6PRVWUbkzNehVoPSCKYviigdnwsck69PLiMPpTVWGENzUAy7spnAZqnxit
+WIF: 5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR
+BIP38 Encrypted WIF: 6PRP4FDk4BWidB539rEWBH26DRcG2tavQg52WRcyuK5dxMdu8WHVftRZof
 BIP38 Decrypted: {
     "wif": "5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR",
     "private_key": "cbf4b9f70470856bb4f40f80b87edb90865997ffee6df315ab166d713af433a5",
@@ -88,13 +84,13 @@ BIP38 Decrypted: {
     "public_key": "04d2ce831dd06e5c1f5b1121ef34c2af4bcb01b126e309234adbc3561b60c9360ea7f23327b49ba7f10d17fad15f068b8807dbbc9e4ace5d4a0b40264eefaf31a4",
     "public_key_type": "uncompressed",
     "seed": null,
-    "address": "1Jq6MksXQVWzrznvZzxkV6oY57oWXD9TXB",
+    "address": "QeS5U4AEaxPpJ8swzLHEcNbAaNkDfpWjQN",
     "lot": null,
     "sequence": null
 }
 -----------------------------------------------------------------------------------------------------------------------------
-WFI: L44B5gGEpqEDRS9vVPz7QT35jcBG2r3CZwSwQ4fCewXAhAhqGVpP
-BIP38 Encrypted WIF: 6PYNKZ1EASfdDgcUgtxxRi7DkYPTXzwYUzEqzDxv2H8QbeKDV9D9wBWUA7
+WIF: L44B5gGEpqEDRS9vVPz7QT35jcBG2r3CZwSwQ4fCewXAhAhqGVpP
+BIP38 Encrypted WIF: 6PYUYP8xySgSbqtYXHGfWUn1xL9F3r9qKru8CUbqeK94QSrJcrSAmZoaEd
 BIP38 Decrypted: {
     "wif": "L44B5gGEpqEDRS9vVPz7QT35jcBG2r3CZwSwQ4fCewXAhAhqGVpP",
     "private_key": "cbf4b9f70470856bb4f40f80b87edb90865997ffee6df315ab166d713af433a5",
@@ -102,7 +98,7 @@ BIP38 Decrypted: {
     "public_key": "02d2ce831dd06e5c1f5b1121ef34c2af4bcb01b126e309234adbc3561b60c9360e",
     "public_key_type": "compressed",
     "seed": null,
-    "address": "164MQi977u9GUteHr4EPH27VkkdxmfCvGW",
+    "address": "QRfLX1RpJN25v2jKGPYsQHu8G1ag3sHJeL",
     "lot": null,
     "sequence": null
 }
@@ -115,20 +111,16 @@ BIP38 Decrypted: {
 ```python
 #!/usr/bin/env python3
 
-from bip38 import (
+from qtum_bip38 import (
     intermediate_code, create_new_encrypted_wif, confirm_code, bip38_decrypt
 )
-from typing import (
-    List, Literal
-)
+from typing import List
 
 import json
 import os
 
 # Passphrase / password
-PASSPHRASE: str = "meherett"  # u"\u03D2\u0301\u0000\U00010400\U0001F4A9"
-# Network type
-NETWORK: Literal["mainnet", "testnet"] = "mainnet"
+PASSPHRASE: str = "qtum123"  # u"\u03D2\u0301\u0000\U00010400\U0001F4A9"
 # To show detail
 DETAIL: bool = True
 # List of samples with owner salt, seed, public key type, lot, and sequence
@@ -159,16 +151,16 @@ for SAMPLE in SAMPLES:
     print("Intermediate Passphrase:", intermediate_passphrase)
 
     encrypted_wif: dict = create_new_encrypted_wif(
-        intermediate_passphrase=intermediate_passphrase, public_key_type=SAMPLE["public_key_type"], seed=SAMPLE["seed"], network=NETWORK
+        intermediate_passphrase=intermediate_passphrase, public_key_type=SAMPLE["public_key_type"], seed=SAMPLE["seed"]
     )
     print("Encrypted WIF:", json.dumps(encrypted_wif, indent=4))
 
     print("Confirm Code:", json.dumps(confirm_code(
-        passphrase=PASSPHRASE, confirmation_code=encrypted_wif["confirmation_code"], network=NETWORK, detail=DETAIL
+        passphrase=PASSPHRASE, confirmation_code=encrypted_wif["confirmation_code"], detail=DETAIL
     ), indent=4))
 
     print("BIP38 Decrypted:", json.dumps(bip38_decrypt(
-        encrypted_wif=encrypted_wif["encrypted_wif"], passphrase=PASSPHRASE, network=NETWORK, detail=DETAIL
+        encrypted_wif=encrypted_wif["encrypted_wif"], passphrase=PASSPHRASE, detail=DETAIL
     ), indent=4))
 
     print("-" * 125)
@@ -178,226 +170,226 @@ for SAMPLE in SAMPLES:
   <summary>Output</summary><br/>
 
 ```shell
-Intermediate Passphrase: passphraseqtFiMLZSKYBJo6ZdivCqkPyMX3bnPFnedQRtEHWHmADXqEfSyJHE1CLuTbF6Wf
+Intermediate Passphrase: passphraserBh92DkAgrAfqUTZoL8daK85X4UtSzQnEFABTmZf6prj1bAa6kPihApMd92xmw
 Encrypted WIF: {
-    "encrypted_wif": "6PfPd3hFPNjBMqirrvSSgEtDnErh9BzqK1NUdk6fiQCaN7LwdGFus4PhQV",
-    "confirmation_code": "cfrm38V5QE7EN2eF9SfWsesQCjJZSoSjc5YiqLDCgEJoqEDoV2D9f7NRXSqQHsWb3MKogaN8zAs",
-    "public_key": "0412bb1ec0a2fa1e7c90f4061578d8deeaa6984c9ec5c37717546fb0d127573a03f3050a9f7cb24f62e107c43470388531193fcd8b878618cf74e1d71698069e07",
-    "seed": "d010fe7f60a25982f3ee7e056e1bcd027f1c15bd26ddd221",
+    "encrypted_wif": "6PfVzPRrrLrv3geDZV6GWcLfGRHBGagK31jBTTBd5f5QknK2S1p1ajLMe6",
+    "confirmation_code": "cfrm38V5kycvZygpKdQmq3TjNED2womqd24UgVxFaxCuBnEAqp1aCUqQLSSAJBifBkcQDj33EcP",
+    "public_key": "0440097fbf7fc6a3dea0962ee4e1701a9cd3964eb0223f243b759e1c04fda754ab88efcdb76753217c7d7b6456932bb8d77e5db1b4de3b22ce561d5daec1c8f809",
+    "seed": "8637d0313eac9aab134ace0d010cf7856ffd2275cd4aba4c",
     "public_key_type": "uncompressed",
-    "address": "1CHsGDzDbZJPVKiC9hUKe1hnAevwu5RTKi"
+    "address": "QTPiD2P1zBz5fiGXxBkLdDyhySqTR7dvuy"
 }
 Confirm Code: {
-    "public_key": "0412bb1ec0a2fa1e7c90f4061578d8deeaa6984c9ec5c37717546fb0d127573a03f3050a9f7cb24f62e107c43470388531193fcd8b878618cf74e1d71698069e07",
+    "public_key": "0440097fbf7fc6a3dea0962ee4e1701a9cd3964eb0223f243b759e1c04fda754ab88efcdb76753217c7d7b6456932bb8d77e5db1b4de3b22ce561d5daec1c8f809",
     "public_key_type": "uncompressed",
-    "address": "1CHsGDzDbZJPVKiC9hUKe1hnAevwu5RTKi",
+    "address": "QTPiD2P1zBz5fiGXxBkLdDyhySqTR7dvuy",
     "lot": null,
     "sequence": null
 }
 BIP38 Decrypted: {
-    "wif": "5Jp53JGVEkX2dxXXJyb2UdJw3259yk3YjJCdhcHA3eXpJsr6PBB",
-    "private_key": "83348354ac6638ad7ea78505bd85ff96485e17edcffe85572df9a66f997e1324",
+    "wif": "5JSLzkUVB6ifEHgQBYrNKBpupV9SFccSfYiVjazAu3bpykVLJ5z",
+    "private_key": "51e047d800758ea123d778f0bc7b375ef7a4a980ed5defaa9d535bc22d728e60",
     "wif_type": "wif",
-    "public_key": "0412bb1ec0a2fa1e7c90f4061578d8deeaa6984c9ec5c37717546fb0d127573a03f3050a9f7cb24f62e107c43470388531193fcd8b878618cf74e1d71698069e07",
+    "public_key": "0440097fbf7fc6a3dea0962ee4e1701a9cd3964eb0223f243b759e1c04fda754ab88efcdb76753217c7d7b6456932bb8d77e5db1b4de3b22ce561d5daec1c8f809",
     "public_key_type": "uncompressed",
-    "seed": "d010fe7f60a25982f3ee7e056e1bcd027f1c15bd26ddd221",
-    "address": "1CHsGDzDbZJPVKiC9hUKe1hnAevwu5RTKi",
+    "seed": "8637d0313eac9aab134ace0d010cf7856ffd2275cd4aba4c",
+    "address": "QTPiD2P1zBz5fiGXxBkLdDyhySqTR7dvuy",
     "lot": null,
     "sequence": null
 }
 -----------------------------------------------------------------------------------------------------------------------------
-Intermediate Passphrase: passphrasedcXyya37d7imwPshCWV77N6SdDCXCGkbUDQ8dgg39Xutzej2UoNTRXCWjcVSk3
+Intermediate Passphrase: passphrasea9wRhemdARJDoZzZMiVcmZaBrQYhofqaNuTAHgLyQmoUjLmpwFtyzFvjcoPRqA
 Encrypted WIF: {
-    "encrypted_wif": "6PgHqxpPU2tA4rqjL5gMMkqeahFRRDDe3g1jJy5mhQdNasT1WtwEkzGcdk",
-    "confirmation_code": "cfrm38V8LPy6dJTRpd7Qs74zLAdE26F3ZGqJ1Dmr5HheKY2miBwbJMdk1qY6VhZDjNJkitu5Di5",
-    "public_key": "049b3dcf56a38df3a2437055f2ad3aec950a54f7205bbcc9949d5299ee4e0215d0924a756dce3baf3356da8465341ebf1c580c4ee13e2602508df57ec49a15e981",
-    "seed": "8195ac15d84c139531faec482a9d312f86f79242acb728a7",
+    "encrypted_wif": "6PgP82oWUAUAVAT41HBXsWih74ZSC5GT5dMbFWoxPYgLHHYbgo3XM7yJ3C",
+    "confirmation_code": "cfrm38V8dbJk9zPFcbN84DF4u4mnkGBMrmM56rtWQyt22aDLNqfYmgEyYuLVq1uEW41LdqVfaf7",
+    "public_key": "045c68c340753c4f416f44cf94eaa2240f0ed054332c87d9a6c4e0bcb4f6f5ebaaaf325b62f066a4e561ec1fd8d3bc546cddbe97889c59a2fd60e2d89b101a1171",
+    "seed": "88cfd3b2a526ff29a62d429e52e597c24af6465edd011de3",
     "public_key_type": "uncompressed",
-    "address": "17YeFTwCoxVhz5P8KiGHv4d8JwUEwPUbhj"
+    "address": "Qf5NdtPRxsNeUTPckEyMW6cc7JpipJRJSw"
 }
 Confirm Code: {
-    "public_key": "049b3dcf56a38df3a2437055f2ad3aec950a54f7205bbcc9949d5299ee4e0215d0924a756dce3baf3356da8465341ebf1c580c4ee13e2602508df57ec49a15e981",
+    "public_key": "045c68c340753c4f416f44cf94eaa2240f0ed054332c87d9a6c4e0bcb4f6f5ebaaaf325b62f066a4e561ec1fd8d3bc546cddbe97889c59a2fd60e2d89b101a1171",
     "public_key_type": "uncompressed",
-    "address": "17YeFTwCoxVhz5P8KiGHv4d8JwUEwPUbhj",
+    "address": "Qf5NdtPRxsNeUTPckEyMW6cc7JpipJRJSw",
     "lot": 863741,
     "sequence": 1
 }
 BIP38 Decrypted: {
-    "wif": "5KGpex1ZJaPoG2L6cHtzAU1nM9un8nw3uD8d6v8xGJs6M6q9qQj",
-    "private_key": "bff2e24adfd0323ecd0b969cb3768adba578a0ea503306fd647e6b11e8739d70",
+    "wif": "5JhYHSPBT4XHuzyjGgxiL6be1zGJzQGoSrRRm7ijWccASdLiCkC",
+    "private_key": "746098bcac5ecbd247f8fd1ca75340bc95bffa53e800169deb77b7e7143b246b",
     "wif_type": "wif",
-    "public_key": "049b3dcf56a38df3a2437055f2ad3aec950a54f7205bbcc9949d5299ee4e0215d0924a756dce3baf3356da8465341ebf1c580c4ee13e2602508df57ec49a15e981",
+    "public_key": "045c68c340753c4f416f44cf94eaa2240f0ed054332c87d9a6c4e0bcb4f6f5ebaaaf325b62f066a4e561ec1fd8d3bc546cddbe97889c59a2fd60e2d89b101a1171",
     "public_key_type": "uncompressed",
-    "seed": "8195ac15d84c139531faec482a9d312f86f79242acb728a7",
-    "address": "17YeFTwCoxVhz5P8KiGHv4d8JwUEwPUbhj",
+    "seed": "88cfd3b2a526ff29a62d429e52e597c24af6465edd011de3",
+    "address": "Qf5NdtPRxsNeUTPckEyMW6cc7JpipJRJSw",
     "lot": 863741,
     "sequence": 1
 }
 -----------------------------------------------------------------------------------------------------------------------------
-Intermediate Passphrase: passphraseoH4GEqnBR53ipb9gwLfbJM8nKMx4LnZPCzYbvgPyR2zYkF5DqKrW2gf8DZ8s7y
+Intermediate Passphrase: passphrasemh3J6kj36t1846BnPFZL1caQN55pJfdcSSCztsQLBzF3jETYppiU5xYSsZrC5e
 Encrypted WIF: {
-    "encrypted_wif": "6PnYW3V9jp8sKA4aMEWJjBvNTRtVYBCSRWb6Yja6xZqBhVVrDXWSnYz2at",
-    "confirmation_code": "cfrm38VUi8UMcgVUDQRSjjn1VxVLfHYQxphSRvAQYSU244oNwHoxt24UByEnUeqSbN6QatRVtaR",
-    "public_key": "022604144840ed73bc5055916e2e114efe2a706ee71033b48644e3e322a2c58dab",
-    "seed": "e0051112f4903c0bbe52dc698c031467bf4646040b6b12a3",
+    "encrypted_wif": "6PnSDkPgRS869GdKSHbUkm6VdKzUZiEtuDSUQUuYAJ2VumpTo3Y7cXbjFc",
+    "confirmation_code": "cfrm38VUMfQFA5nUna7HpkQoiQSWMmw64rnPF3Zwu6g6S6CnXoXDey3Ptovhr9DKZymFQRYnesB",
+    "public_key": "0208d6c6104daf76cdf8eb4ee75afd83b5776fd120e2d9a7cb78df5268fe534a37",
+    "seed": "4bc118a7011b225af9e475f21816e8e71d47c103846e19c2",
     "public_key_type": "compressed",
-    "address": "1EVSAfcUHG8Ce2CF74QwW58wSr7WY4QBaH"
+    "address": "QgCL3wEfZP7RPQ3RRhazRx9Buuq2PLLqoG"
 }
 Confirm Code: {
-    "public_key": "022604144840ed73bc5055916e2e114efe2a706ee71033b48644e3e322a2c58dab",
+    "public_key": "0208d6c6104daf76cdf8eb4ee75afd83b5776fd120e2d9a7cb78df5268fe534a37",
     "public_key_type": "compressed",
-    "address": "1EVSAfcUHG8Ce2CF74QwW58wSr7WY4QBaH",
+    "address": "QgCL3wEfZP7RPQ3RRhazRx9Buuq2PLLqoG",
     "lot": null,
     "sequence": null
 }
 BIP38 Decrypted: {
-    "wif": "Kz2v4F99WaPamvCC2LwGTwdr25TnUXUB991wKpVhHGxtJE6iAveq",
-    "private_key": "53f56bb7fc1a9e9682aa55be6e501776fc9ac2369654c6c85b00b87d41ab8229",
+    "wif": "L4ybEBRKhicidQbeGHjy4f4Wyvad5Kgnwk7FqeQntqwUMcr7ERF1",
+    "private_key": "e76f72811b89f63d88a7329eeedef16710ea66714672021a177e07fd5473f61a",
     "wif_type": "wif-compressed",
-    "public_key": "022604144840ed73bc5055916e2e114efe2a706ee71033b48644e3e322a2c58dab",
+    "public_key": "0208d6c6104daf76cdf8eb4ee75afd83b5776fd120e2d9a7cb78df5268fe534a37",
     "public_key_type": "compressed",
-    "seed": "e0051112f4903c0bbe52dc698c031467bf4646040b6b12a3",
-    "address": "1EVSAfcUHG8Ce2CF74QwW58wSr7WY4QBaH",
+    "seed": "4bc118a7011b225af9e475f21816e8e71d47c103846e19c2",
+    "address": "QgCL3wEfZP7RPQ3RRhazRx9Buuq2PLLqoG",
     "lot": null,
     "sequence": null
 }
 -----------------------------------------------------------------------------------------------------------------------------
-Intermediate Passphrase: passphraseaWdkWraG6G7W9TCAhCtmoLXbFWdDYjrG8gtv2VPCY7mCvJgbFCoktRKm4ePsQU
+Intermediate Passphrase: passphraseZi3JhthoBvhc8wenvQW7Hd7jBcmNjMKg544pQE2kVd5NCvt8qqoV6RLUaWZrEV
 Encrypted WIF: {
-    "encrypted_wif": "6PoHWWXXJTibxUGKcVmyts86N8rcTHXJpAoj5VeRf2FhJqj2oQgCsHheKg",
-    "confirmation_code": "cfrm38VX8GoZrei4jxLQKA6Mx2zSWkrQZPhxQW1FcCRjtizmQDoWoomm5SW63ESEAUuLkA8MFmc",
-    "public_key": "025f4476d9d8c093a04499fe9d7fbd34533dae14a498a2506a90d6cfdda66e99b3",
-    "seed": "1ac2513b9149124a0a0d697ae76cbb4583e85d4a652330a6",
+    "encrypted_wif": "6PoE1PPV7YBVbkPZLsKZGE3T6imCpuDq9pxF1v779xtzo4dd8W13tAn2qD",
+    "confirmation_code": "cfrm38VWvrvCAhjKDVmjnJp1dsTcJphB8YkK9jXygpLAEDQVCoeguazChN5JCpP6EsmWr5iB4wb",
+    "public_key": "036a8f9c1a4d769b7326037cea69009560dbdb35b749ce1b8e716485a8730cfc09",
+    "seed": "1140bf8c4f8c4ca09f90cce6da1ea8de1e43ac37165fe27f",
     "public_key_type": "compressed",
-    "address": "1ESHxrqxMLrdzwfif9nQbq4PTGhDGi1uq2"
+    "address": "QdxToVfxRc5PXtf28STR8u2JpmvpQsevF4"
 }
 Confirm Code: {
-    "public_key": "025f4476d9d8c093a04499fe9d7fbd34533dae14a498a2506a90d6cfdda66e99b3",
+    "public_key": "036a8f9c1a4d769b7326037cea69009560dbdb35b749ce1b8e716485a8730cfc09",
     "public_key_type": "compressed",
-    "address": "1ESHxrqxMLrdzwfif9nQbq4PTGhDGi1uq2",
+    "address": "QdxToVfxRc5PXtf28STR8u2JpmvpQsevF4",
     "lot": 863741,
     "sequence": 1
 }
 BIP38 Decrypted: {
-    "wif": "L2otjF2N8EpKvh541jw1n3MrXZLpnCfQ2GB4eiGZLFwoSj1UHprw",
-    "private_key": "a6c57a43bf2a8ecc153b6b1e8807ec2409033616d4fc98a4edae277c02312eb7",
+    "wif": "L5BrcjdARTnCVjZa9AbeRR6GpZoP9bqp44Puj7VzvWeBUTYUu597",
+    "private_key": "edbebe261a5eca1164911bf523f890a4a99051947c34bec7df71db16b29cfb98",
     "wif_type": "wif-compressed",
-    "public_key": "025f4476d9d8c093a04499fe9d7fbd34533dae14a498a2506a90d6cfdda66e99b3",
+    "public_key": "036a8f9c1a4d769b7326037cea69009560dbdb35b749ce1b8e716485a8730cfc09",
     "public_key_type": "compressed",
-    "seed": "1ac2513b9149124a0a0d697ae76cbb4583e85d4a652330a6",
-    "address": "1ESHxrqxMLrdzwfif9nQbq4PTGhDGi1uq2",
+    "seed": "1140bf8c4f8c4ca09f90cce6da1ea8de1e43ac37165fe27f",
+    "address": "QdxToVfxRc5PXtf28STR8u2JpmvpQsevF4",
     "lot": 863741,
     "sequence": 1
 }
 -----------------------------------------------------------------------------------------------------------------------------
-Intermediate Passphrase: passphraseondJwvQGEWFNrNJRPi4G5XAL5SU777GwTNtqmDXqA3CGP7HXfH6AdBxxc5WUKC
+Intermediate Passphrase: passphraseondJwvQGEWFNsbiN6AVu4r4dPFz4xeJoLg2vQGULvMzgYRKiGezwNDzaAxfX57
 Encrypted WIF: {
-    "encrypted_wif": "6PfP7T3iQ5jLJLsH5DneySLLF5bhd879DHW87Pxzwtwvn2ggcncxsNKN5c",
-    "confirmation_code": "cfrm38V5NZfTZKRaRDTvFAMkNKqKAxTxdDjDdb5RpFfXrVRw7Nov5m2iP3K1Eg5QQRxs52kgapy",
-    "public_key": "04cdcd8f846a73e75c8a845d1df19dc23031648c219d1efc6fe945cd089f3052b09e25cb1d8628cd559c6c57c627fa486b8d452da89c1e9778ea967822188990a4",
+    "encrypted_wif": "6PfMmFWzXobLGrJReqJaNnGcaCMd9T3Xhcwp2jkCHZ6jZoDJ2MnKk15ZuV",
+    "confirmation_code": "cfrm38V5JArEGuKEKE8VSMDSKvS8eZXYq3DckKyFDtw76GxW1TBzdKcovWdL4PbQnPLvJ5EpmZp",
+    "public_key": "049e60857454bff0635324e132e00f102fbe1ab6b0846b12737eca18a05b473e2a0afa7d996c7b49b03fb4d070d94fd765841f7e172f7727bfceed65e98f940c2d",
     "seed": "99241d58245c883896f80843d2846672d7312e6195ca1a6c",
     "public_key_type": "uncompressed",
-    "address": "18VLTHgu95JPi1iLRtN2WwYroAHvHwE2Ws"
+    "address": "QXsy25WUg3kARS1o4t8si4AsyuwZjLkY9R"
 }
 Confirm Code: {
-    "public_key": "04cdcd8f846a73e75c8a845d1df19dc23031648c219d1efc6fe945cd089f3052b09e25cb1d8628cd559c6c57c627fa486b8d452da89c1e9778ea967822188990a4",
+    "public_key": "049e60857454bff0635324e132e00f102fbe1ab6b0846b12737eca18a05b473e2a0afa7d996c7b49b03fb4d070d94fd765841f7e172f7727bfceed65e98f940c2d",
     "public_key_type": "uncompressed",
-    "address": "18VLTHgu95JPi1iLRtN2WwYroAHvHwE2Ws",
+    "address": "QXsy25WUg3kARS1o4t8si4AsyuwZjLkY9R",
     "lot": null,
     "sequence": null
 }
 BIP38 Decrypted: {
-    "wif": "5Jh21edvnWUXFjRz8mDVN3CSPp1CyTuUSFBKZeWYU726R6MW3ux",
-    "private_key": "733134eb516f94aa56ab7ef0874a0d71daf38c5c009dec2a1261861a15889631",
+    "wif": "5JDa1CcN3iLbFeexZC2RhyEkFU2B7oieHAVs5YDwieMhgVS9S9c",
+    "private_key": "34de039d8e90172f246ec3190fc8bd98e46f11bc5d50d062d0d6f806e43372a9",
     "wif_type": "wif",
-    "public_key": "04cdcd8f846a73e75c8a845d1df19dc23031648c219d1efc6fe945cd089f3052b09e25cb1d8628cd559c6c57c627fa486b8d452da89c1e9778ea967822188990a4",
+    "public_key": "049e60857454bff0635324e132e00f102fbe1ab6b0846b12737eca18a05b473e2a0afa7d996c7b49b03fb4d070d94fd765841f7e172f7727bfceed65e98f940c2d",
     "public_key_type": "uncompressed",
     "seed": "99241d58245c883896f80843d2846672d7312e6195ca1a6c",
-    "address": "18VLTHgu95JPi1iLRtN2WwYroAHvHwE2Ws",
+    "address": "QXsy25WUg3kARS1o4t8si4AsyuwZjLkY9R",
     "lot": null,
     "sequence": null
 }
 -----------------------------------------------------------------------------------------------------------------------------
-Intermediate Passphrase: passphraseb7ruSNPsLdQF7t1gh7fs1xvWB4MKDssFQwL11EHkVr4njFX5PtsCUqQqwzh9rS
+Intermediate Passphrase: passphraseb7ruSNPsLdQF57XQM4waP887G6qoGhPVpDS7jEorTKpfXYFxnUSSVwtpQZPT4U
 Encrypted WIF: {
-    "encrypted_wif": "6PgKxJUke6BcDc1XuvPDKCD9krZEebapef98SJ3YAjWQHtR3EVsaeK62ja",
-    "confirmation_code": "cfrm38V8TGcdd9WSGpaB56JaiW7cbvv1ZD89BHjBGu7S7yUFGcht8CqFQoexCHCoiCp4JzsH1Pk",
-    "public_key": "049afcaa528358eddf54634fee9505e90b9572f8733b94260c94d20b563a65a1c94c338d5c09d20c5895d89bd5a2ba39f96ae4b1cf637828714c432042172723b6",
+    "encrypted_wif": "6PgLaWLw6fb6uDBtnN6QVyT9AbvN4zFi8E4oLdSiEWCqsHZFAtcY4wP4LW",
+    "confirmation_code": "cfrm38V8VJb8xnvVY1kkRRVanmL4F91nfuQAZctydcGYKS8ZjPxyZHnACqfJ3ni1AwaCkDMsWVF",
+    "public_key": "04263351adcb7d9298c6865a597ef63094a8e79f35110aab71d29347acd29ddb0c22e139924e329ae9a84b806c27f919c5e60f8f299ed004256109658b5c11b7b7",
     "seed": "99241d58245c883896f80843d2846672d7312e6195ca1a6c",
     "public_key_type": "uncompressed",
-    "address": "1DkQJuST62GkJP9kss68fHT8ftLf4SmLVT"
+    "address": "QfAtAjYNEQMAVtxNaXCWcg1rws3ubJJAED"
 }
 Confirm Code: {
-    "public_key": "049afcaa528358eddf54634fee9505e90b9572f8733b94260c94d20b563a65a1c94c338d5c09d20c5895d89bd5a2ba39f96ae4b1cf637828714c432042172723b6",
+    "public_key": "04263351adcb7d9298c6865a597ef63094a8e79f35110aab71d29347acd29ddb0c22e139924e329ae9a84b806c27f919c5e60f8f299ed004256109658b5c11b7b7",
     "public_key_type": "uncompressed",
-    "address": "1DkQJuST62GkJP9kss68fHT8ftLf4SmLVT",
+    "address": "QfAtAjYNEQMAVtxNaXCWcg1rws3ubJJAED",
     "lot": 567885,
     "sequence": 1
 }
 BIP38 Decrypted: {
-    "wif": "5JGYLxWwyh9agrM6u63RadubRFjTxbDtvBcQ5EywZrHXBLpPrZW",
-    "private_key": "3b9d38cb7d1d97efad80b3934cb1928ae70179317ea4657aaffcdff029f43b90",
+    "wif": "5KXP2dhbmUsgPAFU6Uu6iY4ePafMc53fLjs9mdQXbmPvoLtxiSj",
+    "private_key": "e1013f4521ffeefb06aad092a040189075a5163af3c6cb7ca1622cbea2d498fc",
     "wif_type": "wif",
-    "public_key": "049afcaa528358eddf54634fee9505e90b9572f8733b94260c94d20b563a65a1c94c338d5c09d20c5895d89bd5a2ba39f96ae4b1cf637828714c432042172723b6",
+    "public_key": "04263351adcb7d9298c6865a597ef63094a8e79f35110aab71d29347acd29ddb0c22e139924e329ae9a84b806c27f919c5e60f8f299ed004256109658b5c11b7b7",
     "public_key_type": "uncompressed",
     "seed": "99241d58245c883896f80843d2846672d7312e6195ca1a6c",
-    "address": "1DkQJuST62GkJP9kss68fHT8ftLf4SmLVT",
+    "address": "QfAtAjYNEQMAVtxNaXCWcg1rws3ubJJAED",
     "lot": 567885,
     "sequence": 1
 }
 -----------------------------------------------------------------------------------------------------------------------------
-Intermediate Passphrase: passphraseondJwvQGEWFNrNJRPi4G5XAL5SU777GwTNtqmDXqA3CGP7HXfH6AdBxxc5WUKC
+Intermediate Passphrase: passphraseondJwvQGEWFNsbiN6AVu4r4dPFz4xeJoLg2vQGULvMzgYRKiGezwNDzaAxfX57
 Encrypted WIF: {
-    "encrypted_wif": "6PnUVPinrvPGwoYJK3GbGBNgFuqEXmfvagE4QiAxj7yrZp4i29p22MrY5r",
-    "confirmation_code": "cfrm38VUV4NK45caNN5aomS3dSQLT3FVHq556kehuZX1RNuPs8ArWjw18KCCjyTXktVCDBW65pZ",
-    "public_key": "02cdcd8f846a73e75c8a845d1df19dc23031648c219d1efc6fe945cd089f3052b0",
+    "encrypted_wif": "6PnQ3P5GdsSJSUcJCAmtvn74U9gqPs8JMZLdVBkBYsUvSVd4TjgSZEqB7w",
+    "confirmation_code": "cfrm38VUEZdLCyEmCMZqbbvdhUdsuPZdYy2tmBcbDdmdkyFiLyiScPQSeotgvS6vQZjPXhj92Xj",
+    "public_key": "039e60857454bff0635324e132e00f102fbe1ab6b0846b12737eca18a05b473e2a",
     "seed": "99241d58245c883896f80843d2846672d7312e6195ca1a6c",
     "public_key_type": "compressed",
-    "address": "1BPmkfRYzPAkeErMS6DLDYxPvQEEkoVRz1"
+    "address": "QS3xSF9psn8DMT6uBExPDkm258eJPqJbsB"
 }
 Confirm Code: {
-    "public_key": "02cdcd8f846a73e75c8a845d1df19dc23031648c219d1efc6fe945cd089f3052b0",
+    "public_key": "039e60857454bff0635324e132e00f102fbe1ab6b0846b12737eca18a05b473e2a",
     "public_key_type": "compressed",
-    "address": "1BPmkfRYzPAkeErMS6DLDYxPvQEEkoVRz1",
+    "address": "QS3xSF9psn8DMT6uBExPDkm258eJPqJbsB",
     "lot": null,
     "sequence": null
 }
 BIP38 Decrypted: {
-    "wif": "L15dTs7zPs6UY2HHBGA8BrhV5gTurDkc6RaYw6ZPtdZptsuPR7K3",
-    "private_key": "733134eb516f94aa56ab7ef0874a0d71daf38c5c009dec2a1261861a15889631",
+    "wif": "KxzUftF5tyTUBfCYD5fJ3qDftrGBf3CoYLvQ32p8WotNYrMW4c3t",
+    "private_key": "34de039d8e90172f246ec3190fc8bd98e46f11bc5d50d062d0d6f806e43372a9",
     "wif_type": "wif-compressed",
-    "public_key": "02cdcd8f846a73e75c8a845d1df19dc23031648c219d1efc6fe945cd089f3052b0",
+    "public_key": "039e60857454bff0635324e132e00f102fbe1ab6b0846b12737eca18a05b473e2a",
     "public_key_type": "compressed",
     "seed": "99241d58245c883896f80843d2846672d7312e6195ca1a6c",
-    "address": "1BPmkfRYzPAkeErMS6DLDYxPvQEEkoVRz1",
+    "address": "QS3xSF9psn8DMT6uBExPDkm258eJPqJbsB",
     "lot": null,
     "sequence": null
 }
 -----------------------------------------------------------------------------------------------------------------------------
-Intermediate Passphrase: passphraseb7ruSNDGP7cmnFHQpmos7TeAy26AFN4GyRTBqq6hiaFbQzQBvirD9oHsafQvzd
+Intermediate Passphrase: passphraseb7ruSNDGP7cmphxdxHWx8oo88zHuBBeFyvaWYD2zqHUpLwvXYhqTBnwxiiCUf6
 Encrypted WIF: {
-    "encrypted_wif": "6PoEPBnJjm8UAiSGWQEKKNq9V2GMHqKkTcUqUFzsaX7wgjpQWR2qWPdnpt",
-    "confirmation_code": "cfrm38VWx5xH1JFm5EVE3mzQvDPFkz7SqNiaFxhyUfp3Fjc2wdYmK7dGEWoW6irDPSrwoaxB5zS",
-    "public_key": "024c5175a177a0b6cf0a3d06065345e2e2d0529ea0191ace3d7b003f304353511b",
+    "encrypted_wif": "6PoLtrDYSMopr5nRKDN9LDanSPiSPRQ3vkfmT2gj4c3E3S5FeGTmyuG12z",
+    "confirmation_code": "cfrm38VXKJasUvzUJiyuBsX5TqVdhNV4BhzXEE8ge9TAm3Y13jobt5x8BMqcXNEpdDLgumedBBW",
+    "public_key": "03548814ac8ce03397f544dfa9bde1d148b503237103362da170fd3f330cf3e094",
     "seed": "99241d58245c883896f80843d2846672d7312e6195ca1a6c",
     "public_key_type": "compressed",
-    "address": "1MQaLNgukYWRkNgtmc1dzJ13yFvJoW34u4"
+    "address": "QQ2yBHc39h3Fyb8AnKuwtw1Soxpq9f4GRt"
 }
 Confirm Code: {
-    "public_key": "024c5175a177a0b6cf0a3d06065345e2e2d0529ea0191ace3d7b003f304353511b",
+    "public_key": "03548814ac8ce03397f544dfa9bde1d148b503237103362da170fd3f330cf3e094",
     "public_key_type": "compressed",
-    "address": "1MQaLNgukYWRkNgtmc1dzJ13yFvJoW34u4",
+    "address": "QQ2yBHc39h3Fyb8AnKuwtw1Soxpq9f4GRt",
     "lot": 369861,
     "sequence": 1
 }
 BIP38 Decrypted: {
-    "wif": "KzFbTBirbEEtEPgWL3xhohUcrg6yUmJupAGrid7vBP9F2Vh8GTUB",
-    "private_key": "5a7b39eef5d02551b2d362384e57f9823a1c9bed48a260af920a8bb5d6ad971f",
+    "wif": "L3uXqD8dC2zNpRdDVfsmUCNrz6HMXk2j9fVkgftwd3SM35W6XNVL",
+    "private_key": "c7829407b0a6aee68539bcc4f58878722ac0f441aa462b303da31ab232253d64",
     "wif_type": "wif-compressed",
-    "public_key": "024c5175a177a0b6cf0a3d06065345e2e2d0529ea0191ace3d7b003f304353511b",
+    "public_key": "03548814ac8ce03397f544dfa9bde1d148b503237103362da170fd3f330cf3e094",
     "public_key_type": "compressed",
     "seed": "99241d58245c883896f80843d2846672d7312e6195ca1a6c",
-    "address": "1MQaLNgukYWRkNgtmc1dzJ13yFvJoW34u4",
+    "address": "QQ2yBHc39h3Fyb8AnKuwtw1Soxpq9f4GRt",
     "lot": 369861,
     "sequence": 1
 }
@@ -423,24 +415,6 @@ pytest
 
 Or use `tox` to run the complete suite against the full set of build targets, or pytest to run specific 
 tests against a specific version of Python.
-
-## Contributing
-
-Feel free to open an [issue](https://github.com/meherett/python-bip38/issues) if you find a problem,
-or a pull request if you've solved an issue. And also any help in testing, development,
-documentation and other tasks is highly appreciated and useful to the project.
-There are tasks for contributors of all experience levels.
-
-For more information, see the [CONTRIBUTING.md](https://github.com/meherett/python-bip38/blob/master/CONTRIBUTING.md) file.
-
-## Donations
-
-Buy me a coffee if You found this tool helpful:
-
-- **BTC** - 12uaGVdX1t86FXLQ4yYPrRQDCK7xGGu82r
-- **BTC / ETH / USDT** - [hd.wallet](https://ud.me/hd.wallet)
-
-Thank you very much for your support.
 
 ## License
 

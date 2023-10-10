@@ -402,7 +402,7 @@ BIP38 Decrypted: {
 To get started, just fork this repo, clone it locally, and run:
 
 ```
-pip install -e .[tests,docs] -r requirements.txt
+pip install -e .[tests] -r requirements.txt
 ```
 
 ## Testing

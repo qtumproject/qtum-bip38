@@ -418,4 +418,4 @@ tests against a specific version of Python.
 
 ## License
 
-Distributed under the [MIT](https://github.com/meherett/python-bip38/blob/master/LICENSE) license. See ``LICENSE`` for more information.
+Distributed under the [MIT](https://github.com/qtumproject/qtum-bip38/blob/master/LICENSE) license. See ``LICENSE`` for more information.

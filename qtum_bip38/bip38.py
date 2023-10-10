@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright © 2023, Meheret Tesfaye Batu <meherett.batu@gmail.com>
+# Copyright © 2023, Meheret Tesfaye Batu <meherett@qtum.info>
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or https://opensource.org/license/mit
 
@@ -20,12 +20,10 @@ from .libs.base58 import (
     encode, check_encode, decode, check_decode, ensure_string
 )
 
+# Qtum address prefix
+ADDRESS_PREFIX: int = 0x3a
 # Wallet important format prefix
 WIF_PREFIX: int = 0x80
-# Bitcoin Pay to Public Key Hash (P2PKH) address prefixes
-ADDRESS_PREFIXES: Dict[Literal["mainnet", "testnet"], int] = {
-    "mainnet": 0x00, "testnet": 0x6f
-}
 # BIP38 non-EC-multiplied & EC-multiplied private key prefixes
 BIP38_NO_EC_MULTIPLIED_PRIVATE_KEY_PREFIX: int = 0x0142
 BIP38_EC_MULTIPLIED_PRIVATE_KEY_PREFIX: int = 0x0143
@@ -152,10 +150,6 @@ def uncompress_public_key(public_key: Union[str, bytes]) -> str:
     :type public_key: Union[str, bytes]
 
     :returns: str -- Uncompressed public key
-
-    >>> from bip38 import uncompress_public_key
-    >>> uncompress_public_key(public_key="0348ca8b4e7c0c75ecfd4b437535d186a12f3027be0c29d2125e9c0dec48677caa")
-    '0448ca8b4e7c0c75ecfd4b437535d186a12f3027be0c29d2125e9c0dec48677caacb4cd50b4c5ea3313a69402c8b0a336b183d39ea18215ff69f59fdb540f00559'
     """
 
     public_key: bytes = get_bytes(public_key)
@@ -178,10 +172,6 @@ def compress_public_key(public_key: Union[str, bytes]) -> str:
     :type public_key: Union[str, bytes]
 
     :returns: str -- Compressed public key
-
-    >>> from bip38 import compress_public_key
-    >>> compress_public_key(public_key="0448ca8b4e7c0c75ecfd4b437535d186a12f3027be0c29d2125e9c0dec48677caacb4cd50b4c5ea3313a69402c8b0a336b183d39ea18215ff69f59fdb540f00559")
-    '0348ca8b4e7c0c75ecfd4b437535d186a12f3027be0c29d2125e9c0dec48677caa'
     """
 
     public_key: bytes = get_bytes(public_key)
@@ -237,12 +227,6 @@ def private_key_to_public_key(private_key: Union[str, bytes], public_key_type: L
     :type public_key_type: Literal["uncompressed", "compressed"]
 
     :returns: str -- Public key
-
-    >>> from bip38 import private_key_to_public_key
-    >>> private_key_to_public_key(private_key="cbf4b9f70470856bb4f40f80b87edb90865997ffee6df315ab166d713af433a5")
-    '02d2ce831dd06e5c1f5b1121ef34c2af4bcb01b126e309234adbc3561b60c9360e'
-    >>> private_key_to_public_key(private_key="cbf4b9f70470856bb4f40f80b87edb90865997ffee6df315ab166d713af433a5", public_key_type="uncompressed")
-    '04d2ce831dd06e5c1f5b1121ef34c2af4bcb01b126e309234adbc3561b60c9360ea7f23327b49ba7f10d17fad15f068b8807dbbc9e4ace5d4a0b40264eefaf31a4'
     """
 
     # Get the public key point
@@ -285,20 +269,14 @@ def encode_wif(private_key: Union[str, bytes]) -> Tuple[str, str]:
 
 def private_key_to_wif(private_key: Union[str, bytes], wif_type: Literal["wif", "wif-compressed"] = "wif-compressed") -> str:
     """
-    Private key to Wallet Important Format (WIF) converter
+    Private key to Wallet Important Format (WFI) converter
 
     :param private_key: Private key
     :type private_key: Union[str, bytes]
-    :param wif_type: Wallet Important Format (WIF) type, default to ``wif-compressed``
+    :param wif_type: Wallet Important Format (WFI) type, default to ``wif-compressed``
     :type wif_type: Literal["wif", "wif-compressed"]
 
     :returns: str -- Wallet Important Format
-
-    >>> from bip38 import private_key_to_wif
-    >>> private_key_to_wif(private_key="cbf4b9f70470856bb4f40f80b87edb90865997ffee6df315ab166d713af433a5")
-    'L44B5gGEpqEDRS9vVPz7QT35jcBG2r3CZwSwQ4fCewXAhAhqGVpP'
-    >>> private_key_to_wif(private_key="cbf4b9f70470856bb4f40f80b87edb90865997ffee6df315ab166d713af433a5", wif_type="wif")
-    '5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR'
     """
 
     # Getting uncompressed and compressed
@@ -339,18 +317,12 @@ def decode_wif(wif: str) -> Tuple[bytes, Literal["wif", "wif-compressed"], bytes
 
 def wif_to_private_key(wif: str) -> str:
     """
-    Wallet Important Format (WIF) to Private key converter
+    Wallet Important Format (WFI) to Private key converter
 
     :param wif: Wallet Important Format
     :type wif: str
 
     :returns: str -- Private key
-
-    >>> from bip38 import wif_to_private_key
-    >>> wif_to_private_key(wif="L44B5gGEpqEDRS9vVPz7QT35jcBG2r3CZwSwQ4fCewXAhAhqGVpP")
-    'cbf4b9f70470856bb4f40f80b87edb90865997ffee6df315ab166d713af433a5'
-    >>> wif_to_private_key(wif="5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR")
-    'cbf4b9f70470856bb4f40f80b87edb90865997ffee6df315ab166d713af433a5'
     """
 
     return bytes_to_string(decode_wif(wif=wif)[0])
@@ -358,18 +330,12 @@ def wif_to_private_key(wif: str) -> str:
 
 def get_wif_type(wif: str) -> Literal["wif", "wif-compressed"]:
     """
-    Get Wallet Important Format (WIF) type
+    Get Wallet Important Format (WFI) type
 
     :param wif: Wallet Important Format
     :type wif: str
 
-    :returns: Literal["wif", "wif-compressed"] -- WIF type
-
-    >>> from bip38 import get_wif_type
-    >>> get_wif_type(wif="L44B5gGEpqEDRS9vVPz7QT35jcBG2r3CZwSwQ4fCewXAhAhqGVpP")
-    'wif-compressed'
-    >>> get_wif_type(wif="5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR")
-    'wif'
+    :returns: Literal["wif", "wif-compressed"] -- WFI type
     """
 
     return decode_wif(wif=wif)[1]
@@ -377,52 +343,31 @@ def get_wif_type(wif: str) -> Literal["wif", "wif-compressed"]:
 
 def get_wif_checksum(wif: str) -> str:
     """
-    Get Wallet Important Format (WIF) checksum
+    Get Wallet Important Format (WFI) checksum
 
     :param wif: Wallet Important Format
     :type wif: str
 
-    :returns: str -- WIF checksum
-
-    >>> from bip38 import get_wif_checksum
-    >>> get_wif_checksum(wif="L44B5gGEpqEDRS9vVPz7QT35jcBG2r3CZwSwQ4fCewXAhAhqGVpP")
-    'dc37f844'
-    >>> get_wif_checksum(wif="5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR")
-    'f0a25c0c'
+    :returns: str -- WFI checksum
     """
 
     return bytes_to_string(decode_wif(wif=wif)[2])
 
 
-def public_key_to_addresses(public_key: Union[str, bytes], network: Literal["mainnet", "testnet"] = "mainnet") -> str:
+def public_key_to_addresses(public_key: Union[str, bytes]) -> str:
     """
     Public key to address converter
 
     :param public_key: Public key
     :type public_key: Union[str, bytes]
-    :param network: Network type
-    :type network: Literal["mainnet", "testnet"], default to ``mainnet``
 
     :returns: str -- Address
-
-    >>> from bip38 import public_key_to_addresses
-    >>> public_key_to_addresses(public_key="02d2ce831dd06e5c1f5b1121ef34c2af4bcb01b126e309234adbc3561b60c9360e", network="mainnet")
-    '164MQi977u9GUteHr4EPH27VkkdxmfCvGW'
-    >>> public_key_to_addresses(public_key="04d2ce831dd06e5c1f5b1121ef34c2af4bcb01b126e309234adbc3561b60c9360ea7f23327b49ba7f10d17fad15f068b8807dbbc9e4ace5d4a0b40264eefaf31a4", network="mainnet")
-    '1Jq6MksXQVWzrznvZzxkV6oY57oWXD9TXB'
-    >>> public_key_to_addresses(public_key="02d2ce831dd06e5c1f5b1121ef34c2af4bcb01b126e309234adbc3561b60c9360e", network="testnet")
-    'mkaJhmE5vvaXG17uZdCm6wKpckEfnG4yt9'
-    >>> public_key_to_addresses(public_key="04d2ce831dd06e5c1f5b1121ef34c2af4bcb01b126e309234adbc3561b60c9360ea7f23327b49ba7f10d17fad15f068b8807dbbc9e4ace5d4a0b40264eefaf31a4", network="testnet")
-    'myM3eoxWDWxFe7GYHZw8K21rw7QDNZeDYM'
     """
-    
-    if network not in ["mainnet", "testnet"]:
-        raise ValueError(f"Invalid Bitcoin network, (expected: 'mainnet' or 'testnet', got: {network})")
 
     # Getting public key hash
     public_key_hash: bytes = hash160(get_bytes(public_key))
     payload: bytes = (
-        integer_to_bytes(ADDRESS_PREFIXES[network]) + public_key_hash
+        integer_to_bytes(ADDRESS_PREFIX) + public_key_hash
     )
     return ensure_string(encode(payload + get_checksum(payload)))
 
@@ -443,12 +388,6 @@ def intermediate_code(
     :type owner_salt: Optional[str, bytes]
 
     :returns: str -- Intermediate passphrase
-
-    >>> from bip38 import intermediate_code
-    >>> intermediate_code(passphrase="TestingOneTwoThree")
-    'passphraseqVKbgU4mWMakKGgCtaeVWoETQdzMBy5696bG2w7ckVBeQmoLhMF9vLaxhmzhT3'
-    >>> intermediate_code(passphrase="TestingOneTwoThree", lot=199999, sequence=1, owner_salt="75ed1cdeb254cb38")
-    'passphraseb7ruSN4At4Rb8hPTNcAVezfsjonvUs4Qo3xSp1fBFsFPvVGSbpP2WTJMhw3mVZ'
     """
 
     owner_salt: bytes = get_bytes(owner_salt)
@@ -483,7 +422,7 @@ def intermediate_code(
     ))
 
 
-def bip38_encrypt(wif: str, passphrase: str, network: Literal["mainnet", "testnet"] = "mainnet") -> str:
+def bip38_encrypt(wif: str, passphrase: str) -> str:
     """
     BIP38 Encrypt wallet important format using passphrase/password
 
@@ -491,16 +430,8 @@ def bip38_encrypt(wif: str, passphrase: str, network: Literal["mainnet", "testne
     :type wif: str
     :param passphrase: Passphrase or password text
     :type passphrase: str
-    :param network: Network type
-    :type network: Literal["mainnet", "testnet"], default to ``mainnet``
 
     :returns: str -- Encrypted wallet important format
-
-    >>> from bip38 import bip38_encrypt
-    >>> bip38_encrypt(wif="5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR", passphrase="TestingOneTwoThree")
-    '6PRVWUbkzzsbcVac2qwfssoUJAN1Xhrg6bNk8J7Nzm5H7kxEbn2Nh2ZoGg'
-    >>> bip38_encrypt(wif="L44B5gGEpqEDRS9vVPz7QT35jcBG2r3CZwSwQ4fCewXAhAhqGVpP", passphrase="TestingOneTwoThree")
-    '6PYNKZ1EAgYgmQfmNVamxyXVWHzK5s6DGhwP4J5o44cvXdoY7sRzhtpUeo'
     """
 
     wif_type: Literal["wif", "wif-compressed"] = get_wif_type(wif=wif)
@@ -518,7 +449,7 @@ def bip38_encrypt(wif: str, passphrase: str, network: Literal["mainnet", "testne
     public_key: str = private_key_to_public_key(
         private_key=private_key, public_key_type=public_key_type
     )
-    address: str = public_key_to_addresses(public_key=public_key, network=network)
+    address: str = public_key_to_addresses(public_key=public_key)
     address_hash: bytes = get_checksum(get_bytes(address, unhexlify=False))
     key: bytes = scrypt.hash(unicodedata.normalize("NFC", passphrase), address_hash, 16384, 8, 8)
     derived_half_1, derived_half_2 = key[0:32], key[32:64]
@@ -542,8 +473,7 @@ def bip38_encrypt(wif: str, passphrase: str, network: Literal["mainnet", "testne
 def create_new_encrypted_wif(
     intermediate_passphrase: str,
     public_key_type: Literal["uncompressed", "compressed"] = "uncompressed",
-    seed: Union[str, bytes] = os.urandom(24),
-    network: Literal["mainnet", "testnet"] = "mainnet"
+    seed: Union[str, bytes] = os.urandom(24)
 ) -> dict:
     """
     Create new encrypted wallet important format
@@ -554,16 +484,8 @@ def create_new_encrypted_wif(
     :type public_key_type: Literal["uncompressed", "compressed"]
     :param seed: Seed, default to ``os.urandom(24)``
     :type seed: Optional[str, bytes]
-    :param network: Network type
-    :type network: Literal["mainnet", "testnet"], default to ``mainnet``
 
     :returns: dict -- Encrypted wallet important format
-
-    >>> from bip38 import create_new_encrypted_wif
-    >>> create_new_encrypted_wif(intermediate_passphrase="passphraseb7ruSN4At4Rb8hPTNcAVezfsjonvUs4Qo3xSp1fBFsFPvVGSbpP2WTJMhw3mVZ")
-    {'encrypted_wif': '6PgGSHicUccU2dotWbwJd514DqWdmCM4KFNYiP4poXgC57qfUpEkKbTj9U', 'confirmation_code': 'cfrm38V8Foq3WpRPMXJD34SF6pGT6ht5ihYMWWMbezkzHgPpA1jVkfbTHwQzvuSA4ReF86PHZJY', 'public_key': '045cd5348750657daa7ef756582cbd5564fe6f65a4a4370fcc234f642826c8e43ec927612179c2768cf616fd1a2f1ccfbf91a5529daf2d8439f366fc9c8ae7dc71', 'seed': 'b6b1122e418c4e188de3f57588119f0f5bdc780f52c3f677', 'public_key_type': 'uncompressed', 'address': '1JbyXoVN4hXWirGB265q9VE4pQ6qbY6kmr'}
-    >>> create_new_encrypted_wif(intermediate_passphrase="passphraseb7ruSN4At4Rb8hPTNcAVezfsjonvUs4Qo3xSp1fBFsFPvVGSbpP2WTJMhw3mVZ", public_key_type="compressed", seed="99241d58245c883896f80843d2846672d7312e6195ca1a6c")
-    {'encrypted_wif': '6PoM8coZNg4AGPhQs91RbmmRmfLz6kmnU3XUGGLQxsJ5xN62LsUzMWYcdP', 'confirmation_code': 'cfrm38VXL5T6qVke13sHUWtEjibAkK1RquBqMXb2azCv1Zna6JKvBhD1Gf2b15wBj7UPv2BQnf6', 'public_key': '02100bb0440ff4106a1743750813271e66a7017431e92921e520319f537c7357c1', 'seed': '99241d58245c883896f80843d2846672d7312e6195ca1a6c', 'public_key_type': 'compressed', 'address': '15PuNwFmDqYhRsC9MDPNFvNY4Npzibm67c'}
     """
 
     seed_b: bytes = get_bytes(seed)
@@ -600,7 +522,7 @@ def create_new_encrypted_wif(
         raise ValueError("Invalid ec encrypted wallet important format")
 
     public_key: bytes = multiply_public_key(pass_point, factor_b, public_key_type)
-    address: str = public_key_to_addresses(public_key=public_key, network=network)
+    address: str = public_key_to_addresses(public_key=public_key)
     address_hash: bytes = get_checksum(get_bytes(address, unhexlify=False))
     salt: bytes = address_hash + owner_entropy
     scrypt_hash: bytes = scrypt.hash(pass_point, salt, 1024, 1, 1, 64)
@@ -644,9 +566,7 @@ def create_new_encrypted_wif(
     )
 
 
-def confirm_code(
-    passphrase: str, confirmation_code: str, network: Literal["mainnet", "testnet"] = "mainnet", detail: bool = False
-) -> Union[str, dict]:
+def confirm_code(passphrase: str, confirmation_code: str, detail: bool = False) -> Union[str, dict]:
     """
     Confirm passphrase
 
@@ -654,18 +574,10 @@ def confirm_code(
     :type passphrase: str
     :param confirmation_code: Confirmation code
     :type confirmation_code: str
-    :param network: Network type
-    :type network: Literal["mainnet", "testnet"], default to ``mainnet``
-    :param detail: To show in detail, default to ``False``
+    :param detail: To show in deatil, default to ``False``
     :type detail: bool
 
     :returns: Union[str, dict] -- Confirmation of address info's
-
-    >>> from bip38 import confirm_code
-    >>> confirm_code(passphrase="TestingOneTwoThree", confirmation_code="cfrm38V8Foq3WpRPMXJD34SF6pGT6ht5ihYMWWMbezkzHgPpA1jVkfbTHwQzvuSA4ReF86PHZJY")
-    '1JbyXoVN4hXWirGB265q9VE4pQ6qbY6kmr'
-    >>> confirm_code(passphrase="TestingOneTwoThree", confirmation_code="cfrm38VXL5T6qVke13sHUWtEjibAkK1RquBqMXb2azCv1Zna6JKvBhD1Gf2b15wBj7UPv2BQnf6", detail=True)
-    {'public_key': '02100bb0440ff4106a1743750813271e66a7017431e92921e520319f537c7357c1', 'public_key_type': 'compressed', 'address': '15PuNwFmDqYhRsC9MDPNFvNY4Npzibm67c', 'lot': 199999, 'sequence': 1}
     """
 
     confirmation_code_decode: bytes = check_decode(confirmation_code)
@@ -724,7 +636,7 @@ def confirm_code(
         public_key: bytes = get_bytes(compress_public_key(public_key=public_key))
         public_key_type: str = "compressed"
 
-    address: str = public_key_to_addresses(public_key=public_key, network=network)
+    address: str = public_key_to_addresses(public_key=public_key)
     if get_checksum(get_bytes(address, unhexlify=False)) == address_hash:
         lot: Optional[int] = None
         sequence: Optional[int] = None
@@ -743,9 +655,7 @@ def confirm_code(
     raise ValueError("Incorrect passphrase/password")
 
 
-def bip38_decrypt(
-    encrypted_wif: str, passphrase: str, network: Literal["mainnet", "testnet"] = "mainnet", detail: bool = False
-) -> Union[str, dict]:
+def bip38_decrypt(encrypted_wif: str, passphrase: str, detail: bool = False) -> Union[str, dict]:
     """
     BIP38 Decrypt encrypted wallet important format using passphrase/password
 
@@ -753,18 +663,10 @@ def bip38_decrypt(
     :type encrypted_wif: str
     :param passphrase: Passphrase or password text
     :type passphrase: str
-    :param network: Network type
-    :type network: Literal["mainnet", "testnet"], default to ``mainnet``
     :param detail: To show in detail, default to ``False``
     :type detail: bool
 
     :returns: Union[str, dict] -- WIF or All private Key info's
-
-    >>> from bip38 import bip38_decrypt
-    >>> bip38_decrypt(encrypted_wif="6PRVWUbkzzsbcVac2qwfssoUJAN1Xhrg6bNk8J7Nzm5H7kxEbn2Nh2ZoGg", passphrase="TestingOneTwoThree")
-    '5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR'
-    >>> bip38_decrypt(encrypted_wif="6PRVWUbkzzsbcVac2qwfssoUJAN1Xhrg6bNk8J7Nzm5H7kxEbn2Nh2ZoGg", passphrase="TestingOneTwoThree", detail=True)
-    {'wif': '5KN7MzqK5wt2TP1fQCYyHBtDrXdJuXbUzm4A9rKAteGu3Qi5CVR', 'private_key': 'cbf4b9f70470856bb4f40f80b87edb90865997ffee6df315ab166d713af433a5', 'wif_type': 'wif', 'public_key': '04d2ce831dd06e5c1f5b1121ef34c2af4bcb01b126e309234adbc3561b60c9360ea7f23327b49ba7f10d17fad15f068b8807dbbc9e4ace5d4a0b40264eefaf31a4', 'public_key_type': 'uncompressed', 'address': '1Jq6MksXQVWzrznvZzxkV6oY57oWXD9TXB', 'lot': None, 'sequence': None}
     """
 
     encrypted_wif_decode: bytes = decode(encrypted_wif)
@@ -807,7 +709,7 @@ def bip38_decrypt(
         public_key: str = private_key_to_public_key(
             private_key=private_key, public_key_type=public_key_type
         )
-        address: str = public_key_to_addresses(public_key=public_key, network=network)
+        address: str = public_key_to_addresses(public_key=public_key)
         if get_checksum(get_bytes(address, unhexlify=False)) != address_hash:
             raise ValueError("Incorrect passphrase/password")
 
@@ -881,7 +783,7 @@ def bip38_decrypt(
             public_key_type = "compressed"
             wif_type = "wif-compressed"
 
-        address: str = public_key_to_addresses(public_key=public_key, network=network)
+        address: str = public_key_to_addresses(public_key=public_key)
         if get_checksum(get_bytes(address, unhexlify=False)) == address_hash:
             wif: str = private_key_to_wif(
                 private_key=private_key, wif_type=wif_type

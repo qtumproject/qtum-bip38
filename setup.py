@@ -18,8 +18,8 @@ with open("requirements.txt", "r") as _requirements:
     requirements: list = list(map(str.strip, _requirements.read().split("\n")))
 
 setup(
-    name="qtum_bip38",
-    version="v0.1.0",
+    name="qtum-bip38",
+    version="v0.2.0",
     description="Python library for implementation of BIP38 for Qtum.",
     long_description=long_description,
     long_description_content_type="text/markdown",

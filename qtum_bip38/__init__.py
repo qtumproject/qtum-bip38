@@ -14,6 +14,7 @@ from .bip38 import (
     wif_to_private_key,
     get_wif_type,
     get_wif_checksum,
+    get_wif_network,
     public_key_to_addresses,
     bip38_encrypt,
     bip38_decrypt,
@@ -23,7 +24,7 @@ from .bip38 import (
 )
 
 __version__, __license__, __author__, __email__, __description__ = (
-    "v0.2.0",
+    "v0.3.0",
     "MIT",
     "Meheret Tesfaye Batu",
     "meherett@qtum.info",
@@ -38,6 +39,7 @@ __all__: List[str] = [
     "wif_to_private_key",
     "get_wif_type",
     "get_wif_checksum",
+    "get_wif_network",
     "public_key_to_addresses",
     "bip38_encrypt",
     "bip38_decrypt",

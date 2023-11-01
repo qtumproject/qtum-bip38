@@ -19,7 +19,7 @@ with open("requirements.txt", "r") as _requirements:
 
 setup(
     name="qtum-bip38",
-    version="v0.2.0",
+    version="v0.3.0",
     description="Python library for implementation of BIP38 for Qtum.",
     long_description=long_description,
     long_description_content_type="text/markdown",
